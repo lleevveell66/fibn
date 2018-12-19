@@ -46,10 +46,11 @@ service rsyslog restart
 2) `cat install.sh # because you always audit code from GitHub, right?`
 3) `./install.sh`
 4) If this is a master, edit /etc/fibn/fibn.conf and change MASTER=1 then make sure the MASTERBLACKLIST file location is correct
-5) `fibn_BuildLocal`
-6) `fibn_Apply`
-7) `fibn_Stats`
-8) `crontab -e` and add the following:
+5) Edit /etc/fibn/fibn.conf and make sure the MASTERURL location is correct
+6) `fibn_BuildLocal`
+7) `fibn_Apply`
+8) `fibn_Stats`
+9) `crontab -e` and add the following:
 
 ```
 # * * * * * command to be executed
@@ -65,7 +66,7 @@ service rsyslog restart
 0 * * * * /usr/local/bin/fibn_Stats
 ```
 
-9) Manually edit /etc/local.txt to add any malicious IP addresses you find, manually
-10) Manually edit /etc/whitelist.txt to whitelist any more important IP addresses you need (multiple gateways, DNS, etc.)
+10) Manually edit /etc/local.txt to add any malicious IP addresses you find, manually
+11) Manually edit /etc/whitelist.txt to whitelist any more important IP addresses you need (multiple gateways, DNS, etc.)
 
 
