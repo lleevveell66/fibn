@@ -17,6 +17,14 @@ by Raymond Spangle
 
 ---------------------------------------------
 
+### History:
+- - - - - - 
+
+FIBN is the next generation of my BlockIPSet tool (https://github.com/lleevveell66/BlockIPSet).  FIBN uses the newer 
+firewalld instead of iptables (though implementation of iptables support should not be difficult and is planned soon.)  
+FIBN also expands the idea to be a networked solution, where every host can inform other hosts about malicious IP
+addresses is has had to block.
+
 ### Theory of Operation:
 - - - - - - - - - - 
 
