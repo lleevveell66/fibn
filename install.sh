@@ -16,8 +16,8 @@ echo "Installing fibn binaries ... "
 
 echo "Populating whitelist with your IP address and Gateway IP address ... "
 MYIP=$(hostname -i)
-MYGW=$(/usr/sbin/route -n | /usr/bin/grep 'UG[ \t]' | /usr/bin/awk '{print $2}')
 /usr/bin/echo $MYIP >> /etc/fibn/whitelist.txt
-/usr/bin/echo $MYGW >> /etc/fibn/whitelist.txt
+
+/usr/sbin/route -n | /usr/bin/grep 'UG[ \t]' | /usr/bin/awk '{print $2}' | /usr/bin/tr ' ' '\n' >> /etc/fibn/whitelist.txt
 
 exit 0
