@@ -41,6 +41,10 @@ own Master and Slave to another.  Multiple URLs are not yet supported, but are p
 allowing a true FIBN mesh network, where every host could potentially instruct every other host about malicious IP
 addresses it has found locally.
 
+Taking the above diagram as an example, the Hacker entity will trigger blacklisting on FIBN Master 1 by attempting to 
+FTP, as well as FIBN Slave 1 (the green one) by attempting a telnet.  But, because the list is also retreived remotely 
+by FIBN Master 2 and FIBN Slave 2 (the yellow one), all four hosts will now block the Hacker entity's IP address.
+
 Only firewalld is supported, for now.  I have ipset working in iptables, but not yet integrated into FIBN.  That's coming.
 
 
