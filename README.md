@@ -86,8 +86,11 @@ script to change how you gather local malicious IP addresses.  Mine all come out
 
 2) `cat install.sh # because you always audit code from GitHub, right?`
 3) `./install.sh`
-4) If this is a master, edit /etc/fibn/fibn.conf and change MASTER=1 then make sure the MASTERBLACKLIST file location is correct
-5) Edit /etc/fibn/fibn.conf and make sure the MASTERURL location is correct
+4) If this is a master, edit /etc/fibn/fibn.conf and change MASTER=1 then make sure the MASTERBLACKLIST file location is correct.
+This is where a master will drop its list for pickup via the web from other masters and slaves.  The value is ignored if
+this host is configured as a slave.
+5) Edit /etc/fibn/fibn.conf and make sure the MASTERURL location is correct.  This is the URL where this host will grab a 
+master list from, no matter if it is master or slave.
 6) Build any of the rich rules for logging hits to ports people should not be hitting.  For example, if you have moved SSH
 off of port 22, do not run an FTP daemon, and do not allow telnet, you would run this:
 
