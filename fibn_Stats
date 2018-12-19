@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Determine how many IP addresses we are now blocking
+BLOCKED=$(/usr/sbin/ipset list -output save blacklist|/usr/bin/wc -l)
+
+# Log this number for tracking
+/usr/bin/logger -t FIBN "Blacklisted IP Addresses: $BLOCKED"
+
+exit 0
