@@ -40,9 +40,4 @@ if [ MASTER = "1" ]; then
   /bin/cat $TMPFILE2|/bin/sort -n|/usr/bin/uniq > $MASTERBLACKLIST
 fi
 
-for addr in $(/bin/cat $LOCALBLACKLIST)
-do
-  /usr/sbin/ipset add blacklist $addr
-done
-
 exit 0

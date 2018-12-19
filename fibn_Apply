@@ -68,7 +68,7 @@ def main():
     # List of rules that use the ipset.
     rules = ['rule family=\"ipv4\" source ipset=\"' + ipset_name + '\" drop']
     # URL of the blacklist (gzip format).
-    listurl = 'https://www.leper.org/fibn_master.txt'
+    listurl = 'https://www.leper.org/master.txt'
     # FirewallClient to configure firewalld
     fw_client = FirewallClient()
     # The firewall zone to use (detect the default or choose one explicitly).
