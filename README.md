@@ -58,7 +58,8 @@ where the master list can be found, and some file locations.  /etc/fibn/ also co
 - /etc/fbin/whitelist.txt
 
 Every local list build (once per minute, if you use the cron jobs given below) all malicious IP addresses are aggregated, 
-then any IP address in the whitelist.txt file is removed.  This is then passed into an ipset for firewalld to block them.
+then any IP address in the whitelist.txt file is removed.  This is then passed into an ipset for firewalld to block what is 
+left.
 
 Only firewalld is supported, for now.  I have ipset working in iptables, but not yet integrated into FIBN.  That's coming.
 
