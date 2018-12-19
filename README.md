@@ -43,6 +43,10 @@ addresses it has found locally.
 echo "*.* /var/log/all_messages">>/etc/rsyslog.conf
 service rsyslog restart
 ```
+(NOTE: You can skip this step if you don't like it.  It could be troublesome on smaller devices with limited space 
+and improper log rotation configured, for example.  But, if you skip this, make sure to edit the fibn_BuildLocal 
+script to change how you gather local malicious IP addresses.  Mine all come out of /var/log/all_messages)
+
 2) `cat install.sh # because you always audit code from GitHub, right?`
 3) `./install.sh`
 4) If this is a master, edit /etc/fibn/fibn.conf and change MASTER=1 then make sure the MASTERBLACKLIST file location is correct
