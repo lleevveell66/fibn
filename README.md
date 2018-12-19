@@ -140,7 +140,7 @@ Make sure you see a line similar to:
 0 * * * * /usr/local/bin/fibn_Stats
 ```
 
-9) Manually edit /etc/fibn/local.txt to add any malicious IP addresses you find, manually
+9) Manually edit /etc/fibn/manual.txt to add any malicious IP addresses you find, manually
 10) Manually edit /etc/fibn/whitelist.txt to whitelist any more important IP addresses you need (multiple gateways, DNS, etc.)
 
 
