@@ -4,8 +4,13 @@
   <img src="images/fibn_logo.png" alt="FIBN Logo" width="50%" align="middle">
 </h1>
 
-![FIBN Diagram](images/fibn_diagram.jpg?raw=true "FIBN Diagram")
+--------------------------------------------
 
+<h1 align="center">
+  <img src="images/fibn_diagram.jpg" alt="FIBN Diagram" width="50%" align="middle">
+</h1>
+
+--------------------------------------------
 
 # FIBN (Firewall Ipset Blacklist Network)
 by Raymond Spangle
