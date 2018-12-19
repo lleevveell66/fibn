@@ -51,6 +51,17 @@ script to change how you gather local malicious IP addresses.  Mine all come out
 3) `./install.sh`
 4) If this is a master, edit /etc/fibn/fibn.conf and change MASTER=1 then make sure the MASTERBLACKLIST file location is correct
 5) Edit /etc/fibn/fibn.conf and make sure the MASTERURL location is correct
+6) Build any of the rich rules for logging hits to ports people should not be hitting.  For example, if you have moved SSH
+off of port 22, do not run an FTP daemon, and do not allow telnet, you would run this:
+
+```
+firewall-cmd --permanent --zone=public --add-rich-rule="rule family="ipv4" port protocol="tcp" port="21" log prefix="firewalld-port-attempt" level="info" accept"
+firewall-cmd --permanent --zone=public --add-rich-rule="rule family="ipv4" port protocol="tcp" port="22" log prefix="firewalld-port-attempt" level="info" accept"
+firewall-cmd --permanent --zone=public --add-rich-rule="rule family="ipv4" port protocol="tcp" port="23" log prefix="firewalld-port-attempt" level="info" accept"
+firewall-cmd --reload
+```
+All that is important is that the prefix is "firewalld-port-attempt" for now.  You can always choose your own prefix and edit the
+fibn_BuildLocal script to look for those, later.
 6) `fibn_BuildLocal`
 7) `fibn_Apply`
 8) `fibn_Stats`
