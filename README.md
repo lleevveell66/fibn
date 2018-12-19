@@ -46,6 +46,20 @@ FTP, as well as on FIBN Slave 1 (the green one) by attempting to telnet.  But, b
 from FIBN Master 1 by FIBN Master 2 and FIBN Slave 2 (the yellow one), all four hosts will now block the Hacker entity's 
 IP address.
 
+You can define your own malicious behavior any way you like by editing the fibn_BuildLocal script.  All that matters is that 
+your matches are taken down into IP addresses only, then appended to the $TMPFILE .  Several examples are included.
+
+All configuration is in /etc/fibn/ after installation.  The /etc/fibn/fibn.conf file defines whether or not this is a master,
+where the master list can be found, and some file locations.  /etc/fibn/ also contains all of the local lists:
+
+- /etc/fibn/local.txt
+- /etc/fibn/manual.txt
+- /etc/fibn/master.txt
+- /etc/fbin/whitelist.txt
+
+Every local list build (once per minute, if you use the cron jobs given below) all malicious IP addresses are aggregated, 
+then any IP address in the whitelist.txt file is removed.  This is then passed into an ipset for firewalld to block them.
+
 Only firewalld is supported, for now.  I have ipset working in iptables, but not yet integrated into FIBN.  That's coming.
 
 
