@@ -20,11 +20,12 @@ by Raymond Spangle
 ### Theory of Operation:
 - - - - - - - - - - 
 
-FIBN will automatically block malicious IP addresses, once every minute.  Doing this is considered a "bad idea" by 
-most, since it opens you up to DoS attacks.  The capability to whitelist has been included to help minimize this 
-risk.  Obviously, not bragging about running it will help, as well.   This is where a little "security-through-obscurity" 
-sprinkled into your blue teaming is actually a "good idea".  You are ultimately responsible for proper configuration 
-and use of this tool, and any damage doing so may lead to.
+FIBN will automatically block malicious IP addresses, once every minute.  Doing this can be considered a "bad idea" by 
+some, since it can open you up to DoS attacks.  If they learn where the triggers are, they could spoof from your default 
+gateway, for instance.  The capability to whitelist has been included to help minimize this risk.  Obviously, not bragging 
+about running it will help, as well.   This is an example of when a little "security-through-obscurity" sprinkled into 
+your blue teaming is actually a "good idea".  You are ultimately responsible for proper configuration and use of this 
+tool, and any damage doing so may lead to.
 
 FIBN will compile a total list of IPs to block from three sources:
 - A Master Blacklist, kept somewhere on a web server
@@ -39,6 +40,8 @@ It is not difficult to see how this could easily be massaged into a sort of mesh
 own Master and Slave to another.  Multiple URLs are not yet supported, but are planned for a future release, thus 
 allowing a true FIBN mesh network, where every host could potentially instruct every other host about malicious IP
 addresses it has found locally.
+
+Only firewalld is supported, for now.  I have ipset working in iptables, but not yet integrated into FIBN.  That's coming.
 
 
 ### Pre-requisites:
