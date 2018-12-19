@@ -50,6 +50,7 @@ service rsyslog restart
 7) fibn_Stats
 8) crontab -e and add the following:
 
+<pre>
 # * * * * * command to be executed
 # - - - - -
 # | | | | |
@@ -61,6 +62,7 @@ service rsyslog restart
 
 * * * * * /usr/local/bin/fibn_BuildLocal && /usr/local/bin/fibn_Apply
 0 * * * * /usr/local/bin/fibn_Stats
+</pre>
 
 9) Manually edit /etc/local.txt to add any malicious IP addresses you find, manually
 10) Manually edit /etc/whitelist.txt to whitelist any more important IP addresses you need
