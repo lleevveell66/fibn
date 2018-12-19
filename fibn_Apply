@@ -1,19 +1,24 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 
 """FIBN (Firewall Ipset Blacklist Network): Networked (master/slave'd) blacklist generator and ipset builder."""
+
 from firewall.client import FirewallClient, FirewallClientIPSetSettings
 from zlib import decompress
 from syslog import syslog
 from urllib2 import urlopen, HTTPError
 
-__author__ = 'level6'
+__author__ = 'Raymond Spangle'
 __version__ = '0.5'
 
+def get_config():
+     with open('/etc/fibn/fibn.conf','r') as f:
+        for line in f:
+            variable_name = line.split("=")[0]
+            if (variable_name == "MASTERURL"):
+                master_url = line.split("=")[1]
+                return master_url
+
 def get_ips(url):
-    """Get a list of IPs from a blacklist.
-    url: The URL of the block list.
-    returns: List of IPs from the blacklist.
-    """
     try:
         response = urlopen(url)
     except HTTPError as e:
@@ -24,75 +29,48 @@ def get_ips(url):
         return []
     try:
         ip_list_txt = response.read()
-#        ip_list_gz = response.read()
-#        ip_list_txt = decompress(ip_list_gz, 16).decode()
     except:
          syslog('An error has occured.')
-#        syslog('Error decompressing file.')
          return []
     ip_list = []
 
     with open('/etc/fibn/local.txt','r') as f:
         for line in f:
-#            print(line)
-            line_nonl=line.rstrip();
+            line_nonl = line.rstrip();
             if (len(line_nonl) > 0 and line_nonl[0] != '#' and line_nonl.count('.') == 3):
-#                print('Found one at: {IP}\n'.format(IP=line_nonl))
                 ip_list.append(line_nonl)
         
     for entry in ip_list_txt.split('\n'):
-        # Only add entries that are IP addresses.
         if (len(entry) > 0 and entry[0] != '#' and entry.count('.') == 3):
             ip_list.append(entry)
 
     return sorted(set(ip_list))
 
 def mk_ipset(name, type, client):
-    """Make a new IP Set.
-    name: The name to use.
-    type: The type create.
-    client: A FirewallClient.
-    returns: The new IP Set.
-    """
     settings = FirewallClientIPSetSettings()
     settings.setType(type)
     config = client.config()
     return config.addIPSet(name, settings)
 
 def main():
-#    syslog('Starting IP blacklist script %s.' % __version__)
-    # The name to use for the IP Set.
     ipset_name = 'blacklist'
-    # The type of IP Set (only 'hash:ip' for now).
     ipset_type = 'hash:ip'
-    # List of rules that use the ipset.
     rules = ['rule family=\"ipv4\" source ipset=\"' + ipset_name + '\" drop']
-    # URL of the blacklist (gzip format).
-    listurl = 'https://www.leper.org/master.txt'
-    # FirewallClient to configure firewalld
+    listurl = get_config()
     fw_client = FirewallClient()
-    # The firewall zone to use (detect the default or choose one explicitly).
     zone_name = fw_client.getDefaultZone()
 
     iplist = get_ips(listurl)
 
     if (fw_client.connected and len(iplist) > 0):
         if (ipset_name in fw_client.config().getIPSetNames()):
-            # ipset already exists so use it.
             ipset = fw_client.config().getIPSetByName(ipset_name)
-            #syslog('Using existing ipset \"%s\".' % ipset_name)
         else:
-            # ipset doesn't exist so create it.
             ipset = mk_ipset(ipset_name, ipset_type, fw_client)
-            #syslog('Created new ipset \"%s\".' % ipset_name)
-        # Reloading firewall flushes existing ipset / makes new one available.
         fw_client.reload()
-        # Add the IPs to the ipset.
-        #syslog('Adding %i IP(s) to ipset \"%s\".' % (len(iplist), ipset_name))
+
         for ip in iplist:
             fw_client.addEntry(ipset_name, ip)
-        # Create the rich rule(s) that use the ipset.
-        #syslog('Creating %i rich rule(s).' % len(rules))
         for rule in rules:
             fw_client.addRichRule(zone_name, rule)
     else:
