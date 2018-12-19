@@ -63,10 +63,20 @@ firewall-cmd --reload
 All that is important is that the prefix is "firewalld-port-attempt" for now.  You can always choose your own prefix and edit the
 fibn_BuildLocal script to look for those, later.
 
-7) `fibn_BuildLocal`
-8) `fibn_Apply`
-9) `fibn_Stats`
-10) `crontab -e` and add the following:
+7) Make sure everything works, with:
+
+```
+fibn_BuildLocal
+fibn_Apply
+fibn_Stats
+tail /var/log/all_messages
+```
+
+Make sure you see a line similar to:
+
+> Dec 19 08:00:01 freemail FIBN: Blacklisted IP Addresses: 547
+
+8) `crontab -e` and add the following:
 
 ```
 # * * * * * command to be executed
@@ -82,7 +92,7 @@ fibn_BuildLocal script to look for those, later.
 0 * * * * /usr/local/bin/fibn_Stats
 ```
 
-11) Manually edit /etc/local.txt to add any malicious IP addresses you find, manually
-12) Manually edit /etc/whitelist.txt to whitelist any more important IP addresses you need (multiple gateways, DNS, etc.)
+9) Manually edit /etc/local.txt to add any malicious IP addresses you find, manually
+10) Manually edit /etc/whitelist.txt to whitelist any more important IP addresses you need (multiple gateways, DNS, etc.)
 
 
