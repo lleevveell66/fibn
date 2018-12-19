@@ -6,38 +6,38 @@
 # Import FIBN configuration
 . /etc/fibn/fibn.conf
 
-# Determine my IP address and Gateway IP address
-MYIP=$(/usr/bin/hostname -i)
-MYGW=$(/usr/sbin/route -n | /usr/bin/grep 'UG[ \t]' | /usr/bin/awk '{print $2}')
-
+TMPFILE2=$(echo -n "$TMPFILE.safe")
 
 ##### Gather Local IPs to Blacklist #####
 # Some examples are provided.  This is where you can customize your own malicious IP checks
 
 # Attempts to scan ports
-/bin/grep "Bad protocol version identification" /var/log/all_messages | /bin/sed 's/.*from //'|sed 's/ port.*//'|/bin/sort -n|/usr/bin/uniq|/bin/grep -v $MYIP|/bin/grep -v $MYGW>$TMPFILE
+/bin/grep "Bad protocol version identification" /var/log/all_messages | /bin/sed 's/.*from //'|sed 's/ port.*//'|/bin/sort -n|/usr/bin/uniq>$TMPFILE
 
 # Attempts to brute email
-/bin/cat /var/log/all_messages |/bin/grep sql|/bin/grep unknown|/bin/grep "sql(.*,.*)"|/bin/sed "s/.*sql(.*,//"|sed "s/).*//"|/bin/sort -n|/usr/bin/uniq|/bin/grep -v $MYIP|/bin/grep -v $MYGW>>$TMPFILE
-/bin/cat /var/log/all_messages | /bin/grep "SASL LOGIN authentication failed" | /bin/awk '{print $7;}' | /bin/sed 's/.*\[//' | /bin/sed 's/\].*//' | /bin/sort -n | /usr/bin/uniq|/bin/grep -v $MYIP|/bin/grep -v $MYGW>>$TMPFILE
-/bin/cat /var/log/all_messages |/bin/grep "lost connection after UNKNOWN from"|/bin/sed 's/.*\[//'|/bin/sed 's/\].*//'|/bin/sort -n |/usr/bin/uniq|/bin/grep -v $MYIP|/bin/grep -v $MYGW>>$TMPFILE
+/bin/cat /var/log/all_messages |/bin/grep sql|/bin/grep unknown|/bin/grep "sql(.*,.*)"|/bin/sed "s/.*sql(.*,//"|sed "s/).*//"|/bin/sort -n|/usr/bin/uniq>>$TMPFILE
+/bin/cat /var/log/all_messages | /bin/grep "SASL LOGIN authentication failed" | /bin/awk '{print $7;}' | /bin/sed 's/.*\[//' | /bin/sed 's/\].*//' | /bin/sort -n | /usr/bin/uniq>>$TMPFILE
+/bin/cat /var/log/all_messages |/bin/grep "lost connection after UNKNOWN from"|/bin/sed 's/.*\[//'|/bin/sed 's/\].*//'|/bin/sort -n |/usr/bin/uniq>>$TMPFILE
 
 # Attempts to hit ports that are not listening, but configured to log
 # e.g., 
 # firewall-cmd --permanent --zone=public --add-rich-rule="rule family="ipv4" port protocol="tcp" port="21" log prefix="firewalld-port-attempt" level="info" accept"
 # firewall-cmd --permanent --zone=public --add-rich-rule="rule family="ipv4" port protocol="tcp" port="22" log prefix="firewalld-port-attempt" level="info" accept"
 # firewall-cmd --permanent --zone=public --add-rich-rule="rule family="ipv4" port protocol="tcp" port="23" log prefix="firewalld-port-attempt" level="info" accept"
-/bin/cat /var/log/all_messages |/bin/grep firewalld-port-attempt|/bin/sed 's/.*SRC=//' |/bin/sed 's/ .*//'|/bin/sort -n|/usr/bin/uniq|/bin/grep -v $MYIP|/bin/grep -v $MYGW>> $TMPFILE
+/bin/cat /var/log/all_messages |/bin/grep firewalld-port-attempt|/bin/sed 's/.*SRC=//' |/bin/sed 's/ .*//'|/bin/sort -n|/usr/bin/uniq>> $TMPFILE
 
 # Include any IPs you manually added
-/bin/cat $MANUALLIST|/bin/sort -n|/usr/bin/uniq |/bin/grep -v $MYIP|/bin/grep -v $MYGW>> $TMPFILE
+/bin/cat $MANUALLIST|/bin/sort -n|/usr/bin/uniq>> $TMPFILE
+
+# Remove whitelisted IP Addresses
+/bin/grep -Fwvf /etc/fibn/whitelist.txt $TMPFILE > $TMPFILE2
 
 # Create the new local blacklist
-/bin/cat $TMPFILE|/bin/sort -n|/usr/bin/uniq > $LOCALBLACKLIST
+/bin/cat $TMPFILE2|/bin/sort -n|/usr/bin/uniq > $LOCALBLACKLIST
 
 # If we are a master, also drop off our new list for the other slaves to pick up
 if [ MASTER = "1" ]; then
-  /bin/cat $TMPFILE|/bin/sort -n|/usr/bin/uniq > $MASTERBLACKLIST
+  /bin/cat $TMPFILE2|/bin/sort -n|/usr/bin/uniq > $MASTERBLACKLIST
 fi
 
 for addr in $(/bin/cat $LOCALBLACKLIST)

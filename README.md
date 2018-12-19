@@ -65,6 +65,6 @@ service rsyslog restart
 </pre>
 
 9) Manually edit /etc/local.txt to add any malicious IP addresses you find, manually
-10) Manually edit /etc/whitelist.txt to whitelist any more important IP addresses you need
+10) Manually edit /etc/whitelist.txt to whitelist any more important IP addresses you need (multiple gateways, DNS, etc.)
 
 
