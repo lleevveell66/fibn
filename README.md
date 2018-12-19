@@ -39,16 +39,17 @@ Installation:
 - - - - - - -
 
 1) Make a super syslog, with:
+```
 echo "*.* /var/log/all_messages">>/etc/rsyslog.conf
 service rsyslog restart
-
-2) cat install.sh # because you always audit code from GitHub, right?
-3) ./install.sh
+```
+2) `cat install.sh # because you always audit code from GitHub, right?`
+3) `./install.sh`
 4) If this is a master, edit /etc/fibn/fibn.conf and change MASTER=1 then make sure the MASTERBLACKLIST file location is correct
-5) fibn_BuildLocal
-6) fibn_Apply
-7) fibn_Stats
-8) crontab -e and add the following:
+5) `fibn_BuildLocal`
+6) `fibn_Apply`
+7) `fibn_Stats`
+8) `crontab -e` and add the following:
 
 ```
 # * * * * * command to be executed
