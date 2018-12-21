@@ -36,8 +36,11 @@ TMPFILE2=$(echo -n "$TMPFILE.safe")
 /bin/cat $TMPFILE2|/bin/sort -n|/usr/bin/uniq > $LOCALBLACKLIST
 
 # If we are a master, also drop off our new list for the other slaves to pick up
-if [ MASTER = "1" ]; then
+if (( MASTER = 1 )); then
   /bin/cat $TMPFILE2|/bin/sort -n|/usr/bin/uniq > $MASTERBLACKLIST
 fi
+
+# Flush the blacklist ipset in preparation of applying the new list
+/usr/sbin/ipset flush blacklist
 
 exit 0
