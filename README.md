@@ -13,7 +13,7 @@
 --------------------------------------------
 
 # FIBN (Firewall Ipset Blacklist Network)
-by Raymond Spangle
+by LEVEL6 (https://github.com/lleevveell66)
 
 ---------------------------------------------
 
